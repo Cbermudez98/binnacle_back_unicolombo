@@ -6,6 +6,7 @@ import { appDataSource } from "./src/config/typeorm";
 import { ParameterStore } from "./src/utils/Constant";
 
 const app: Application = express();
+app.use(express.json());
 app.set("PORT", ParameterStore.PORT);
 
 appDataSource.initialize()

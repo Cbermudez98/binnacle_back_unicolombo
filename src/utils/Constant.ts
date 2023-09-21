@@ -10,4 +10,5 @@ export class ParameterStore {
     static readonly DB_HOST = process?.env?.DB_HOST || "localhost";
     static readonly DB_DIALECT = process?.env?.DB_DIALECT || "mysql";
     static readonly DB_PORT = process?.env?.DB_PORT || 3306;
+    static readonly JWT_KEY = process?.env?.JWT_KEY || "test"
 }

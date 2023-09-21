@@ -1,8 +1,8 @@
-import { IUserCreate, IUser, IUserUpdate } from "../domain/IUser.interface";
+import { IUserCreate, IUser, IUserUpdate, IUserLogin } from "../domain/IUser.interface";
 import { IUserUseCase } from "../domain/IUserUseCase";
-import { IUserService } from "../infrastructure/interfaces/IUserServices";
+import { IUserService } from "../domain/IUserServices";
 
-export class UserUseCase implements IUserUseCase{
+export class UserUseCase implements IUserUseCase {
     private _userService: IUserService;
     constructor({ userService }: { userService: IUserService }) {
         this._userService = userService;
@@ -10,7 +10,10 @@ export class UserUseCase implements IUserUseCase{
 
     async createUser(user: IUserCreate): Promise<IUser> {
         try {
-            return await this._userService.createUser(user);
+            const newUser = await this._userService.createUser(user);
+            const userN = { ...newUser } as any;
+            delete userN.password;
+            return userN;
         } catch (error) {
             throw error;
         }
@@ -31,4 +34,12 @@ export class UserUseCase implements IUserUseCase{
             throw error;
         }
     }
+
+    async login(event: IUserLogin): Promise<{ token: string }> {
+        try {
+            return await this._userService.login(event);
+        } catch (error) {
+            throw error;
+        }
+    };
 }
