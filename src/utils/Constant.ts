@@ -11,4 +11,10 @@ export class ParameterStore {
     static readonly DB_DIALECT = process?.env?.DB_DIALECT || "mysql";
     static readonly DB_PORT = process?.env?.DB_PORT || 3306;
     static readonly JWT_KEY = process?.env?.JWT_KEY || "test"
+
+    // Email
+    static readonly EMAIL_SERVICE = process?.env?.EMAIL_SERVICE || "test";
+    static readonly EMAIL_HOST = process?.env?.EMAIL_HOST || "test";
+    static readonly EMAIL = process?.env?.EMAIL || "test";
+    static readonly EMAIL_PASSWORD = process?.env?.EMAIL_PASSWORD || "test";
 }
