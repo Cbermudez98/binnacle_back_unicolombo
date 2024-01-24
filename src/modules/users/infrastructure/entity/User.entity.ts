@@ -26,6 +26,9 @@ export class User implements IUser {
     
     @Column({ type: "varchar", length: 15, unique: true })
     document_number: string;
+
+    @Column({ type: "boolean", default: false})
+    auth: boolean;
     
     @CreateDateColumn()
     created_at: Date;

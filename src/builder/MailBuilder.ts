@@ -1,7 +1,7 @@
 import { IEmail } from "../modules/shared/interfaces/IEmail";
 
 export class MailBuilder {
-    private _email: IEmail;
+    private _email: IEmail = {} as IEmail;
 
     setTo(to: IEmail["to"]): this {
         this._email["to"] = to;
