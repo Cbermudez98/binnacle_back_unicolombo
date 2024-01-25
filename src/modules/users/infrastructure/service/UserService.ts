@@ -94,7 +94,7 @@ export class UserService implements IUserService {
                     status: HttpStatusCode.UNAUTHORIZED
                 }
             }
-            const token = this._auth.encode({ email: event, iat: Date.now() })
+            const token = this._auth.encode({ id: user.id })
             return { token };
         } catch (error) {
             if(isCustomError(error)) {

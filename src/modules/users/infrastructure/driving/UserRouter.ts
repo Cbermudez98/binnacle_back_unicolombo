@@ -7,6 +7,7 @@ import { Validator } from "../../../middleware/schemaValidator/Validator";
 import { useSchema, userLoginSchema, userUpdateSchema } from "../schemas/UserSchema";
 import { IAuth } from "../../../shared/interfaces/IAuth";
 import { Auth } from "../../../middleware/auth/Auth";
+import { IRequest } from "../../../shared/interfaces/IRequest";
 
 export class UserRouter implements IRouterModule {
     private readonly _userRouter: Router;
@@ -22,32 +23,31 @@ export class UserRouter implements IRouterModule {
         this._authMiddleware = new Auth();
     }
     initRoutes(): Router {
-        this._userRouter.get("/:id",
+        this._userRouter.get("/",
         this._authMiddleware.validate(),
-            (req: Request, res: Response) => {
-                this._responseModel.manageResponse(this._userUseCase.getUser(Number(req.params.id)), req, res);
+            (req: IRequest, res: Response) => {
+                this._responseModel.manageResponse(this._userUseCase.getUser(Number(req.user)), req, res);
         });
 
         this._userRouter.post("/",
-        this._authMiddleware.validate(),
             Validator.validate(useSchema),
-            (req: Request, res: Response) => {
+            (req: IRequest, res: Response) => {
                 this._responseModel.manageResponse(this._userUseCase.createUser(req.body), req, res);
         });
 
-        this._userRouter.patch("/:id",
+        this._userRouter.patch("/",
         this._authMiddleware.validate(),
             Validator.validate(userUpdateSchema),
-            (req: Request, res: Response) => {
-                this._responseModel.manageResponse(this._userUseCase.updateUser(Number(req.params.id),req.body), req, res);
+            (req: IRequest, res: Response) => {
+                this._responseModel.manageResponse(this._userUseCase.updateUser(Number(req.user),req.body), req, res);
         });
 
         this._userRouter.post("/login", 
         Validator.validate(userLoginSchema),
-            (req: Request, res: Response) => {
+            (req: IRequest, res: Response) => {
                 this._responseModel.manageResponse(this._userUseCase.login(req.body), req, res);
             });
-        this._userRouter.get("/verification/:token", (req: Request, res: Response) => {
+        this._userRouter.get("/verification/:token", (req: IRequest, res: Response) => {
             this._responseModel.manageResponse(this._userUseCase.validate(req.params.token), req, res);
         });
         return this._userRouter;

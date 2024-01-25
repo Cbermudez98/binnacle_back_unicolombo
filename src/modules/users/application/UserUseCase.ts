@@ -47,9 +47,6 @@ export class UserUseCase implements IUserUseCase {
     async validate(token: string): Promise<{ message: string }> {
         try {
             const decodedToken = new Auth().verifyToken(token);
-            if(typeof decodedToken === "string") throw {
-                error: "Error decoding token"
-            }
             await this._userService.updateUser(decodedToken.id, { auth: true });
             return { message: "Validated" };
         } catch (error) {
