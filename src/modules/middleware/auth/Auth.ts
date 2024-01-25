@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { ParameterStore } from "../../utils/Constant";
-import { IAuth } from "../shared/interfaces/IAuth";
+import { ParameterStore } from "../../../utils/Constant";
+import { IAuth } from "../../shared/interfaces/IAuth";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
-import { HttpStatusCode } from "../shared/httpStatus/HttpStatus";
+import { HttpStatusCode } from "../../shared/httpStatus/HttpStatus";
 
 export class Auth implements IAuth {
     encode(payload: Record<string, any>): string {

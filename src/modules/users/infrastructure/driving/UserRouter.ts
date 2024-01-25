@@ -3,10 +3,10 @@ import { IRouterModule } from "../../../shared/interfaces/IRouterModule";
 import { UserUseCase } from "../../application/UserUseCase";
 import { UserService } from "../service/UserService";
 import { ResponseModel } from "../../../shared/response/ResponseModel";
-import { Validator } from "../../../shared/schemaValidator/Validator";
+import { Validator } from "../../../middleware/schemaValidator/Validator";
 import { useSchema, userLoginSchema, userUpdateSchema } from "../schemas/UserSchema";
 import { IAuth } from "../../../shared/interfaces/IAuth";
-import { Auth } from "../../../middleware/Auth";
+import { Auth } from "../../../middleware/auth/Auth";
 
 export class UserRouter implements IRouterModule {
     private readonly _userRouter: Router;

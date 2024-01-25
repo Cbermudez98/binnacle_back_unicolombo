@@ -4,7 +4,7 @@ import { UserRepository } from '../repository/UserRepository';
 import { IUserService } from '../../domain/IUserServices';
 import { IUserRepository } from '../../domain/IUserRepository';
 import { HttpStatusCode } from '../../../shared/httpStatus/HttpStatus';
-import { Auth } from "./../../../middleware/Auth"
+import { Auth } from "../../../middleware/auth/Auth"
 import { IAuth } from '../../../shared/interfaces/IAuth';
 import { EmailTemplate } from '../../../../helper/EmailTemplate';
 import { MailBuilder } from '../../../../builder/MailBuilder';

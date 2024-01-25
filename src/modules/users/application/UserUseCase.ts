@@ -1,7 +1,7 @@
 import { IUserCreate, IUser, IUserUpdate, IUserLogin } from "../domain/IUser.interface";
 import { IUserUseCase } from "../domain/IUserUseCase";
 import { IUserService } from "../domain/IUserServices";
-import { Auth } from "../../middleware/Auth";
+import { Auth } from "../../middleware/auth/Auth";
 
 export class UserUseCase implements IUserUseCase {
     private _userService: IUserService;

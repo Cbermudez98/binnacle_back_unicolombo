@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ObjectSchema } from "joi";
+import Logger from "../../../utils/Logger";
 
 export class Validator {
     public static validate(schema: ObjectSchema) {
