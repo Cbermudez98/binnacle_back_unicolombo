@@ -5,4 +5,5 @@ export interface IUserUseCase {
     updateUser: (id: IUser['id'], user: IUserUpdate) => Promise<boolean>,
     getUser: (id: IUser['id']) => Promise<IUser>,
     login: (event: IUserLogin) => Promise<{ token: string }>
+    validate: (token: string) => Promise<{ message: string }>;
 }

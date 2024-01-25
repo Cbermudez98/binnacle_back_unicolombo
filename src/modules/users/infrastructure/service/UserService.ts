@@ -29,7 +29,7 @@ export class UserService implements IUserService {
             builder.setSubject("Bienvenido a la bitacora de libros de programacion unicolombo");
             const newUser = await this._userRepository.create(user);
             const jwt = new Auth().encode({ id: newUser.id });
-            const url  = `${ParameterStore.URL_FRONT}/auth/${jwt}`;
+            const url  = `${ParameterStore.URL_FRONT}users/verification/${jwt}`;
             const read = fs.readFileSync(path.join(process.cwd(), "src/statics/email-verification.html"), { encoding: "utf-8" });
             const template = EmailTemplate.builder(read, 
                 [
@@ -68,7 +68,7 @@ export class UserService implements IUserService {
 
     async updateUser(id: number, user: IUserUpdate): Promise<boolean> {
         try {
-            const userFound = await this._userRepository.getCustomUser({ id });
+            const userFound = await this._userRepository.get(id);
             if (!userFound) {
                 throw "User not found";
             }

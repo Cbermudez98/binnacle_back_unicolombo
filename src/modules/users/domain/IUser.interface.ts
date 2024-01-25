@@ -17,4 +17,4 @@ export interface IUser extends IUserCreate {
 
 export interface IUserLogin extends Pick<IUser, "email" | "password"> {}
 
-export interface IUserUpdate extends Partial<Omit<IUser, "id" | "created_at" | "updated_at">> {}
+export interface IUserUpdate extends Partial<Omit<IUser, "id" | "created_at" | "updated_at" | "auth">> {}

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ParameterStore } from "../../utils/Constant";
 import { IAuth } from "../shared/interfaces/IAuth";
-import { sign, verify } from "jsonwebtoken";
+import { JwtPayload, sign, verify } from "jsonwebtoken";
 import { HttpStatusCode } from "../shared/httpStatus/HttpStatus";
 
 export class Auth implements IAuth {
@@ -11,17 +11,23 @@ export class Auth implements IAuth {
         });
     }
 
-    decode(req: Request, res: Response, next: NextFunction): void {
-        try {
-            const authorization = req.headers?.authorization || "";
-            const valid = verify(authorization, ParameterStore.JWT_KEY);
-            if (valid) {
-                next();
-            } else {
-                throw "Unauthorized";
+    validate() {
+        return (req: Request, res: Response, next: NextFunction): void => {
+            try {
+                const authorization = req.headers?.authorization?.split(" ")[1] || "";
+                const valid = this.verifyToken(authorization);
+                if (valid) {
+                    next();
+                } else {
+                    throw "Unauthorized";
+                }
+            } catch (error) {
+                res.status(HttpStatusCode.UNAUTHORIZED).send({ error: "Unauthorized" });
             }
-        } catch (error) {
-            res.status(HttpStatusCode.UNAUTHORIZED).send({ error: "Unauthorized" });
         }
+    }
+
+    verifyToken(token: string): JwtPayload | string {
+        return verify(token, ParameterStore.JWT_KEY);
     }
 }
