@@ -7,14 +7,15 @@ on:
 
 jobs:
   build:
+    name: Unit testing
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
       
       - name: Set up node
-        uses: action/setup-node@v2
+        uses: actions/setup-node@v2
         with:
           node-version: 20
       
