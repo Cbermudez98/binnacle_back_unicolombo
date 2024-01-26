@@ -4,6 +4,9 @@ import jwt from "jsonwebtoken";
 import { Auth } from "../../../../../src/modules/middleware/auth/Auth";
 
 describe("Auth test", () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
     it("Should encode with success", () => {
         const auth = new Auth();
         const decode = auth.encode({ message: "encoded" });
@@ -18,7 +21,6 @@ describe("Auth test", () => {
         const { res, next } = getMockRes();
         auth.validate()(req, res, next);
         expect(next).toHaveBeenCalled();
-        jest.clearAllMocks();
     });
 
     it("Should decode with success", () => {
@@ -29,6 +31,5 @@ describe("Auth test", () => {
         verity.mockImplementation((token: string) => undefined);
         auth.validate()(req, res, next);
         expect(next).not.toHaveBeenCalled();
-        jest.clearAllMocks();
     });
 });

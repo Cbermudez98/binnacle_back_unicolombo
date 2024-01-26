@@ -41,7 +41,6 @@ export class UserService implements IUserService {
             await Mailer.send(builder.build());
             return newUser;
         } catch (error) {
-            Logger.fatal(error);
             throw {
                 error: "Error creating user",
                 status: HttpStatusCode.CONFLICT

@@ -1,12 +1,14 @@
 import { IUserCreate, IUser, IUserUpdate, IUserLogin } from "../domain/IUser.interface";
 import { IUserUseCase } from "../domain/IUserUseCase";
 import { IUserService } from "../domain/IUserServices";
-import { Auth } from "../../middleware/auth/Auth";
+import { IAuth } from "../../shared/interfaces/IAuth";
 
 export class UserUseCase implements IUserUseCase {
     private _userService: IUserService;
-    constructor({ userService }: { userService: IUserService }) {
+    private _authService: IAuth;
+    constructor({ userService }: { userService: IUserService }, { authService }: { authService: IAuth }) {
         this._userService = userService;
+        this._authService = authService;
     }
 
     async createUser(user: IUserCreate): Promise<IUser> {
@@ -46,7 +48,7 @@ export class UserUseCase implements IUserUseCase {
 
     async validate(token: string): Promise<{ message: string }> {
         try {
-            const decodedToken = new Auth().verifyToken(token);
+            const decodedToken = this._authService.verifyToken(token);
             await this._userService.updateUser(decodedToken.id, { auth: true });
             return { message: "Validated" };
         } catch (error) {

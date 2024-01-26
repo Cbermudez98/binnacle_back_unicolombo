@@ -6,7 +6,6 @@ export class EmailTemplate {
         for(const variable of variables) {
             newTemplate = newTemplate.replace(variable.name, variable.value);
         }
-        Logger.silly(newTemplate);
         return newTemplate;
     }
 }
