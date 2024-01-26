@@ -7,6 +7,7 @@ on:
 
 jobs:
   build:
+    name: Unit testing
     runs-on: ubuntu-latest
 
     steps:
