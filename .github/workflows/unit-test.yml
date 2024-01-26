@@ -4,10 +4,10 @@ on:
   pull_request:
     branches:
       - develop
+      - main
 
 jobs:
   build:
-    name: Unit testing
     runs-on: ubuntu-latest
 
     steps:
