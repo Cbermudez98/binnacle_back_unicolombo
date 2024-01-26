@@ -9,7 +9,6 @@ import Logger from "./src/utils/Logger";
 import { App } from "./src/app/app";
 
 const app = new App();
-
 const application = app.getApp();
 
 appDataSource.initialize()
