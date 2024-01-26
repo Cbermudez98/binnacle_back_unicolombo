@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import { ParameterStore } from "../utils/Constant";
 import { join } from "path";
+import { User } from "../modules/users/infrastructure/entity/User.entity";
 
 export const appDataSource = new DataSource({
     type: ParameterStore.DB_DIALECT as any,
@@ -10,7 +11,7 @@ export const appDataSource = new DataSource({
     password: ParameterStore.DB_PASSWORD,
     database: ParameterStore.DB_DATABASE,
     entities: [
-        join(__dirname, "../modules/**/infrastructure/entity/*.entity.ts")
+        User
     ],
     migrations: [
         join(__dirname, "../migrations/**/*.ts")

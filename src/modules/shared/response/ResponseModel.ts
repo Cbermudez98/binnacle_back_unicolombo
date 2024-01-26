@@ -1,13 +1,16 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { IResponseModel } from "../interfaces/IResponseModel";
+import { HttpStatusCode } from "../httpStatus/HttpStatus";
+import { IRequest } from "../interfaces/IRequest";
 
 export class ResponseModel implements IResponseModel {
 
-    manageResponse(promise: Promise<any>, req: Request, res: Response): void {
-        promise.then((data) => {
-            res.status(200).send(data);
+    manageResponse(promise: Promise<any>, req: IRequest, res: Response): Promise<void> {
+        return promise.then((data) => {
+            res.status(200).send({ data });
         }).catch((error) => {
-            res.status(500).send({ error: error.message || "Internal server error" });
+            res.status(error?.status || HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .send({ error: error?.error || "Internal server error" });
         });
     };
 }

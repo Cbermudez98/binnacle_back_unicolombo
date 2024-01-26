@@ -1,0 +1,25 @@
+name: develop
+run-name: develop job
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: action/checkout@v2
+      
+      - name: Set up node
+        uses: action/setup-node@v2
+        with:
+          node-version: 20
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run unit testing
+        run: npm run test:dev
