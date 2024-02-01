@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { Response, Router } from "express";
 import { IRouterModule } from "../../../shared/interfaces/IRouterModule";
 import { UserUseCase } from "../../application/UserUseCase";
 import { UserService } from "../service/UserService";
@@ -18,7 +18,7 @@ export class UserRouter implements IRouterModule {
     constructor() {
         this._responseModel = new ResponseModel();
         this._userService = new UserService();
-        this._userUseCase = new UserUseCase({ userService: this._userService });
+        this._userUseCase = new UserUseCase({ userService: this._userService }, { authService: this._authMiddleware });
         this._userRouter = Router();
         this._authMiddleware = new Auth();
     }

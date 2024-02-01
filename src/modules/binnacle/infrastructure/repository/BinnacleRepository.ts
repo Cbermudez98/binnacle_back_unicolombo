@@ -1,6 +1,6 @@
 import { DataSource, Repository } from "typeorm";
 import { IBinnacleRepository } from "../../domain/IBinnacleRepository";
-import { IBookUpdate, IBook, IBookCreate, IBookFind } from "../../domain/IBook";
+import { IBookUpdate, IBook, IBookFind, INewBook } from "../../domain/IBook";
 import { appDataSource } from "../../../../config/typeorm";
 import { Book } from "../entity/Book.entity";
 
@@ -27,7 +27,7 @@ export class BinnacleRepository implements IBinnacleRepository {
         }
     }
 
-    async create(book: IBookCreate): Promise<IBook> {
+    async create(book: INewBook): Promise<IBook> {
         try {
             return await this._bookRepository.save(book);
         } catch (error) {

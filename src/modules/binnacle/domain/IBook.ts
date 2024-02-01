@@ -13,4 +13,6 @@ export interface IBookCreate extends Omit<IBook, "id" | "url"> {
     book: string;
 }
 
+export interface INewBook extends Omit<IBook, "id"> {};
+
 export interface IBookUpdate extends Partial<IBookCreate> {}

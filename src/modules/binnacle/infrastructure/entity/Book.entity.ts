@@ -6,19 +6,19 @@ export class Book implements IBook {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @Column({ type: "string", length: 100, nullable: false })
+    @Column({ type: "varchar", length: 100, nullable: false })
     title: string;
 
-    @Column({ type: "string", length: 500, nullable: false })
+    @Column({ type: "varchar", length: 500, nullable: false })
     description: string;
 
-    @Column({ type: "string", nullable: false })
+    @Column({ type: "varchar", nullable: false })
     author: string;
 
     @Column({ type: "boolean", nullable: false })
     active: true;
 
-    @Column({ type: "string", nullable: false })
+    @Column({ type: "varchar", nullable: false })
     url: string;
 
     @CreateDateColumn()
