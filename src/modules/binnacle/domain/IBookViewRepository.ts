@@ -1,5 +1,5 @@
-import { IBookViewCrete } from "./IBookView";
+import { IBookViewCreate } from "./IBookView";
 
 export interface IBookViewRepository {
-    register: (trace: IBookViewCrete) => Promise<void>;
+    register: (trace: IBookViewCreate) => Promise<void>;
 }

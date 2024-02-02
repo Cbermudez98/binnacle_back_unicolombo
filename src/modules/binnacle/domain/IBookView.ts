@@ -4,9 +4,10 @@ import { IBook } from "./IBook";
 export interface IBookView {
     user: IUser;
     book: IBook;
+    opened_at: Date;
 }
 
-export interface IBookViewCrete {
+export interface IBookViewCreate {
     userId: IUser["id"];
     bookId: IBook["id"];
 }

@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { IUser } from "../../domain/IUser.interface";
 
-@Entity()
+@Entity({ name: "users" })
 export class User implements IUser {
     @PrimaryGeneratedColumn("uuid")
     id: string;
