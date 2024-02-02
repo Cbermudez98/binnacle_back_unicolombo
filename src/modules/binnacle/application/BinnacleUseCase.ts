@@ -1,5 +1,5 @@
 import { IBinnacleService } from '../domain/IBinnacleService';
-import { IBook, IBookCreate, IBookUpdate } from '../domain/IBook';
+import { IBook, IBookCreate, IBookFilter, IBookUpdate } from '../domain/IBook';
 import { IBinnacleUseCase } from './../domain/IBinnacleUseCase';
 
 export class BinnacleUseCase implements IBinnacleUseCase {
@@ -15,9 +15,9 @@ export class BinnacleUseCase implements IBinnacleUseCase {
             throw error;
         }
     }
-    async getBooks(): Promise<IBook[]> {
+    async getBooks(limit: number = 20, offset: number = 0, book: string = ""): Promise<IBookFilter> {
         try {
-            return await this._binnacleService.getBooks();
+            return await this._binnacleService.getBooks(limit, offset, book);
         } catch (error) {
             throw error;
         }

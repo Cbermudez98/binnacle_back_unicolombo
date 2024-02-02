@@ -16,3 +16,11 @@ export interface IBookCreate extends Omit<IBook, "id" | "url"> {
 export interface INewBook extends Omit<IBook, "id"> {};
 
 export interface IBookUpdate extends Partial<IBookCreate> {}
+
+export interface IBookFilter {
+    currentPage: number;
+    totalPages: number;
+    nextPage: number | null;
+    prevPage: number | null;
+    data: IBook[];
+}

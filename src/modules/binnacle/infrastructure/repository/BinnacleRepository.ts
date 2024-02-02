@@ -1,4 +1,4 @@
-import { DataSource, Repository } from "typeorm";
+import { DataSource, Like, Repository } from "typeorm";
 import { IBinnacleRepository } from "../../domain/IBinnacleRepository";
 import { IBookUpdate, IBook, IBookFind, INewBook } from "../../domain/IBook";
 import { appDataSource } from "../../../../config/typeorm";
@@ -22,6 +22,20 @@ export class BinnacleRepository implements IBinnacleRepository {
             const response = await this._bookRepository.find({ where: { active: true } });
             if (response) return response;
             throw new Error("Error getting books");
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getAndCount(limit: number, offset: number, title: string): Promise<{ data: IBook[]; count: number; }> {
+        try {
+            const whereClause = title ? { title: Like(`%${title}%`) } : {};
+            const [data, count] = await this._bookRepository.findAndCount({
+                where: whereClause,
+                skip: offset,
+                take: limit,
+            });
+            return { data, count };
         } catch (error) {
             throw error;
         }

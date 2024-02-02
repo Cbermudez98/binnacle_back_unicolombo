@@ -4,7 +4,7 @@ import { UserRepository } from '../repository/UserRepository';
 import { IUserService } from '../../domain/IUserServices';
 import { IUserRepository } from '../../domain/IUserRepository';
 import { HttpStatusCode } from '../../../shared/httpStatus/HttpStatus';
-import { Auth } from "../../../middleware/auth/Auth"
+import { Auth } from "../../../middleware/auth/Auth.middleware"
 import { IAuth } from '../../../shared/interfaces/IAuth';
 import { EmailTemplate } from '../../../../helper/EmailTemplate';
 import { MailBuilder } from '../../../../builder/MailBuilder';
@@ -13,6 +13,8 @@ import Mailer from '../../../../utils/Mailer';
 import Logger from '../../../../utils/Logger';
 import path from 'path';
 import { isCustomError } from '../../../shared/customError/CustomError';
+import { ROLE } from '../../../shared/enums/Enum';
+import Encrypt from '../../../../utils/Encrypt';
 export class UserService implements IUserService {
     private _userRepository: IUserRepository;
     private _auth: IAuth;
@@ -23,11 +25,12 @@ export class UserService implements IUserService {
 
     async createUser(user: IUserCreate): Promise<IUser> {
         try {
+            const password = Encrypt.encrypt(user.password);
             const builder = new MailBuilder();
             builder.setTo(user.email);
             builder.setFrom(ParameterStore.EMAIL);
             builder.setSubject("Bienvenido a la bitacora de libros de programacion unicolombo");
-            const newUser = await this._userRepository.create(user);
+            const newUser = await this._userRepository.create({ ...user, password });
             const jwt = new Auth().encode({ id: newUser.id });
             const url  = `${ParameterStore.URL_FRONT}users/verification/${jwt}`;
             const read = fs.readFileSync(path.join(process.cwd(), "src/statics/email-verification.html"), { encoding: "utf-8" });
@@ -41,6 +44,7 @@ export class UserService implements IUserService {
             await Mailer.send(builder.build());
             return newUser;
         } catch (error) {
+            Logger.trace(error);
             throw {
                 error: "Error creating user",
                 status: HttpStatusCode.CONFLICT
@@ -68,6 +72,7 @@ export class UserService implements IUserService {
     async updateUser(id: string, user: IUserUpdate): Promise<boolean> {
         try {
             const userFound = await this._userRepository.get(id);
+            Logger.silly(userFound);
             if (!userFound) {
                 throw "User not found";
             }
@@ -83,6 +88,7 @@ export class UserService implements IUserService {
     async login(event: IUserLogin): Promise<{ token: string }> {
         try {
             const user = await this._userRepository.getCustomUser({ email: event.email });
+            Logger.info(user);
             if (!user) {
                 throw "User not found";
             }
@@ -93,7 +99,15 @@ export class UserService implements IUserService {
                     status: HttpStatusCode.UNAUTHORIZED
                 }
             }
-            const token = this._auth.encode({ id: user.id })
+
+            const passwordMatch = Encrypt.compare(user.password, event.password);
+            if (!passwordMatch) {
+                throw {
+                    error: "Password not matching",
+                    status: HttpStatusCode.UNAUTHORIZED
+                };
+            }
+            const token = this._auth.encode({ id: user.id, role: ROLE.STUDENT });
             return { token };
         } catch (error) {
             if(isCustomError(error)) {
@@ -106,6 +120,25 @@ export class UserService implements IUserService {
                 error: "User not found",
                 status: HttpStatusCode.NOT_FOUND
             };
+        }
+    }
+
+    async loginAdmin(event: IUserLogin): Promise<{ token: string; }> {
+        try {
+            const userToValidate: IUserLogin = {
+                email: ParameterStore.EMAIL,
+                password: ParameterStore.EMAIL_PASSWORD
+            };
+            if(event.email !== userToValidate.email || event.password !== userToValidate.password) {
+                throw new Error();
+            }
+            const token = this._auth.encode({ id: "admin", role: ROLE.ADMIN });
+            return { token };
+        } catch (error) {
+            throw {
+                error: "Admin not found",
+                status: HttpStatusCode.NOT_FOUND
+            }
         }
     }
 }

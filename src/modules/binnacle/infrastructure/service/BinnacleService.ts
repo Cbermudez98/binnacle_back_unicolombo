@@ -1,7 +1,7 @@
 import { HttpStatusCode } from "../../../shared/httpStatus/HttpStatus";
 import { IBinnacleRepository } from "../../domain/IBinnacleRepository";
 import { IBinnacleService } from "../../domain/IBinnacleService";
-import { IBookCreate, IBook, IBookUpdate } from "../../domain/IBook";
+import { IBookCreate, IBook, IBookUpdate, IBookFilter } from "../../domain/IBook";
 import { IBookViewRepository } from "../../domain/IBookViewRepository";
 import FileUploader from "../../../../utils/FileUploader";
 import { ParameterStore } from "../../../../utils/Constant";
@@ -71,10 +71,20 @@ export class BinnacleService implements IBinnacleService {
         }
     }
 
-    async getBooks(): Promise<IBook[]> {
+    async getBooks(limit: number, offset: number, book: string): Promise<IBookFilter> {
         try {
-            const books = await this._repository.get();
-            return books as IBook[];
+            const { count, data } = await this._repository.getAndCount(limit, offset, book);
+            const currentPage = Math.floor(offset / limit) + 1;
+            const totalPages = Math.ceil(count / limit);
+            const nextPage = offset + limit < count ? currentPage + 1 : null;
+            const prevPage = offset > 0 ? currentPage - 1 : null;
+            return {
+                currentPage,
+                totalPages,
+                nextPage,
+                prevPage,
+                data
+            };
         } catch (error) {
             throw {
                 error: "Error getting books",

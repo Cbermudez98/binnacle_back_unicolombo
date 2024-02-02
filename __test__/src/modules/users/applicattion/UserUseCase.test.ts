@@ -13,6 +13,7 @@ describe("User use case test", () => {
         createUser: () => Promise.resolve({} as IUser),
         getUser: () => Promise.resolve({} as IUser),
         login: () => Promise.resolve({ token: "123123" }),
+        loginAdmin: () => Promise.resolve({ token: "123123" }),
         updateUser: () => Promise.resolve(true)
     };
 
@@ -42,6 +43,9 @@ describe("User use case test", () => {
             throw new Error()
         },
         login: () => {
+            throw new Error()
+        },
+        loginAdmin: () => {
             throw new Error()
         },
         updateUser: () => {

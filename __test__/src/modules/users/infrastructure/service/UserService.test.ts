@@ -5,7 +5,7 @@ import { IUserService } from "../../../../../../src/modules/users/domain/IUserSe
 import { UserService } from "../../../../../../src/modules/users/infrastructure/service/UserService";
 import { UserRepository } from "../../../../../../src/modules/users/infrastructure/repository/UserRepository";
 import Mailer from "../../../../../../src/utils/Mailer";
-import { Auth } from "../../../../../../src/modules/middleware/auth/Auth";
+import { Auth } from "../../../../../../src/modules/middleware/auth/Auth.middleware";
 
 describe("User service test", () => {
     let userService: IUserService;

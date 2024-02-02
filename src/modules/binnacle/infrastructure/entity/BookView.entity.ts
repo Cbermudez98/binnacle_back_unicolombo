@@ -8,11 +8,11 @@ export class BookView implements IBookView {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne(() => Book)
+  @ManyToOne(() => Book, { onDelete: "CASCADE" })
   @JoinColumn({ name: "book_id" })
   book: Book;
 
