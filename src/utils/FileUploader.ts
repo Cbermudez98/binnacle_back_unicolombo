@@ -1,6 +1,5 @@
-import { getStorage, ref, uploadString, getDownloadURL, FirebaseStorage } from "firebase/storage";
+import { getStorage, ref, uploadString, getDownloadURL, FirebaseStorage, uploadBytes } from "firebase/storage";
 import { appFirebase } from "../config/firebase";
-import Logger from "./Logger";
 
 type extension = "pdf" | "jpeg" | "png";
 
@@ -12,14 +11,13 @@ class FileUploader {
 
     async uploadAndGetUrl(file: { data: string, name: string, extension: extension, folder: string }): Promise<string> {
         try {
-            const storageRef = ref(this._storage, `${file.folder}/${file.name}-${Date.now()}.${file.extension}`);
-            const buffer = Buffer.from(file.data, 'base64');
-            const uint8Array = new Uint8Array(buffer);
-            await uploadString(storageRef, uint8Array.toString(), 'base64', { contentType: 'application/pdf' });
+            const url = `${file.folder}/${file.name.trim().replace(/\s+/g, "_")}_${Date.now()}.${file.extension}`;
+            const storageRef = ref(this._storage, url);
+            const buffer = Buffer.from(file.data.split(",")[1], 'base64');
+            await uploadBytes(storageRef, buffer);
             const downloadUrl = await getDownloadURL(storageRef);
             return downloadUrl;
         } catch (error) {
-            Logger.fatal(error);
             throw new Error("Error uploading file");
         }
     }

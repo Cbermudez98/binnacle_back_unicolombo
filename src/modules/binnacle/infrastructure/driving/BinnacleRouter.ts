@@ -42,7 +42,7 @@ export class BinnacleRouter implements IRouterModule {
         this._binnacleRouter.get("/:id", 
         this._authMiddleware.validate(),
             (req: IRequest, res: Response) => {
-                this._responseModel.manageResponse(this._binnacleUseCase.getBook(req.params.id, Number(req.user)), req, res);
+                this._responseModel.manageResponse(this._binnacleUseCase.getBook(req.params.id, req.user || ""), req, res);
             });
         this._binnacleRouter.post("/",
             this._authMiddleware.validate(),

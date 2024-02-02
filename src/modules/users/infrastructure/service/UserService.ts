@@ -48,7 +48,7 @@ export class UserService implements IUserService {
         }
     };
 
-    async getUser(id: number): Promise<IUser> {
+    async getUser(id: string): Promise<IUser> {
         try {
             const user = await this._userRepository.get(id);
             if (!user) {
@@ -65,7 +65,7 @@ export class UserService implements IUserService {
         }
     };
 
-    async updateUser(id: number, user: IUserUpdate): Promise<boolean> {
+    async updateUser(id: string, user: IUserUpdate): Promise<boolean> {
         try {
             const userFound = await this._userRepository.get(id);
             if (!userFound) {

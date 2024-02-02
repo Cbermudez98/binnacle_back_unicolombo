@@ -18,15 +18,15 @@ export class UserRouter implements IRouterModule {
     constructor() {
         this._responseModel = new ResponseModel();
         this._userService = new UserService();
+        this._authMiddleware = new Auth();
         this._userUseCase = new UserUseCase({ userService: this._userService }, { authService: this._authMiddleware });
         this._userRouter = Router();
-        this._authMiddleware = new Auth();
     }
     initRoutes(): Router {
         this._userRouter.get("/",
         this._authMiddleware.validate(),
             (req: IRequest, res: Response) => {
-                this._responseModel.manageResponse(this._userUseCase.getUser(Number(req.user)), req, res);
+                this._responseModel.manageResponse(this._userUseCase.getUser(req.user || ""), req, res);
         });
 
         this._userRouter.post("/",
@@ -39,7 +39,7 @@ export class UserRouter implements IRouterModule {
         this._authMiddleware.validate(),
             Validator.validate(userUpdateSchema),
             (req: IRequest, res: Response) => {
-                this._responseModel.manageResponse(this._userUseCase.updateUser(Number(req.user),req.body), req, res);
+                this._responseModel.manageResponse(this._userUseCase.updateUser(req.user || "",req.body), req, res);
         });
 
         this._userRouter.post("/login", 

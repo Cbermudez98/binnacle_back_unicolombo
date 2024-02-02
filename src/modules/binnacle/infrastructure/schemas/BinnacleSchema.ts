@@ -18,5 +18,6 @@ export const bookUpdate: Joi.ObjectSchema<IBookCreate> = Joi.object({
     title,
     description,
     author,
-    book
+    book,
+    active
 });

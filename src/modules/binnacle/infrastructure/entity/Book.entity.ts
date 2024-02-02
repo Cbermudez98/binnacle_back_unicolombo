@@ -15,7 +15,7 @@ export class Book implements IBook {
     @Column({ type: "varchar", nullable: false })
     author: string;
 
-    @Column({ type: "boolean", nullable: false })
+    @Column({ type: "boolean", nullable: false, default: true })
     active: true;
 
     @Column({ type: "varchar", nullable: false })

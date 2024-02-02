@@ -8,7 +8,7 @@ export class BinnacleUseCase implements IBinnacleUseCase {
         this._binnacleService = binnacleService;
         
     }
-    async getBook(bookId: string, userId: number): Promise<IBook> {
+    async getBook(bookId: string, userId: string): Promise<IBook> {
         try {
             return await this._binnacleService.getBook(userId, bookId);
         } catch (error) {

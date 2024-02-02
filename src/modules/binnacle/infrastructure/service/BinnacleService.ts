@@ -25,7 +25,12 @@ export class BinnacleService implements IBinnacleService {
                 data: book.book
             });
             Logger.info(url);
-            return await this._repository.create({ ...book, url });
+            const newBook = {
+                ...book,
+                url
+            } as any;
+            delete newBook.book;
+            return await this._repository.create(newBook);
         } catch (error) {
             throw {
                 error: "Error creating book",
@@ -36,7 +41,15 @@ export class BinnacleService implements IBinnacleService {
 
     async updateBook(id: string, book: IBookUpdate): Promise<boolean> {
         try {
-            return await this._repository.update(id, book);
+            const bookToUpdate = { ...book } as any;
+            if(book.book) {
+                const foundBook: IBook = await this._repository.get({ id }) as IBook;
+                const url = await FileUploader.uploadAndGetUrl({ data: book.book, extension: "pdf", folder: ParameterStore.URL_BUCKET_PDF, name: book.title ?? foundBook.title })
+                Logger.silly(url);
+                bookToUpdate.url = url;
+            }
+            delete bookToUpdate.book;
+            return await this._repository.update(id, bookToUpdate);
         } catch (error) {
             throw {
                 error: "Error updating book",
@@ -45,7 +58,7 @@ export class BinnacleService implements IBinnacleService {
         }
     }
 
-    async getBook(userId: number, id: string): Promise<IBook> {
+    async getBook(userId: string, id: string): Promise<IBook> {
         try {
             const book = await this._repository.get({ id });
             await this._bookViewRepository.register({ bookId: id, userId });
