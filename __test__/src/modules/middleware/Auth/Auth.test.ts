@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import jwt from "jsonwebtoken";
-import { Auth } from "../../../../../src/modules/middleware/auth/Auth";
+import { Auth } from "../../../../../src/modules/middleware/auth/Auth.middleware";
 
 describe("Auth test", () => {
     afterEach(() => {

@@ -13,11 +13,12 @@ describe("User use case test", () => {
         createUser: () => Promise.resolve({} as IUser),
         getUser: () => Promise.resolve({} as IUser),
         login: () => Promise.resolve({ token: "123123" }),
+        loginAdmin: () => Promise.resolve({ token: "123123" }),
         updateUser: () => Promise.resolve(true)
     };
 
     const authMock: IAuth = {
-        verifyToken: () => ({ id: 1 } as JwtPayload),
+        verifyToken: () => ({ id: "1" } as JwtPayload),
         encode: jest.fn(),
         validate: jest.fn()
     };
@@ -44,6 +45,9 @@ describe("User use case test", () => {
         login: () => {
             throw new Error()
         },
+        loginAdmin: () => {
+            throw new Error()
+        },
         updateUser: () => {
             throw new Error()
         },
@@ -59,13 +63,13 @@ describe("User use case test", () => {
     it("Should update a user successfully", async () => {
         const user = {} as IUserCreate;
         const useCase = new UserUseCase({ userService: mockSuccess }, { authService: authMock});
-        const response = await useCase.updateUser(1, user);
+        const response = await useCase.updateUser("1", user);
         expect(response).toBeDefined();
     });
 
     it("Should get a user successfully", async () => {
         const useCase = new UserUseCase({ userService: mockSuccess }, { authService: authMock});
-        const response = await useCase.getUser(1);
+        const response = await useCase.getUser("1");
         expect(response).toBeDefined();
     });
 
@@ -96,7 +100,7 @@ describe("User use case test", () => {
         const user = {} as IUserCreate;
         const useCase = new UserUseCase({ userService: mockFail }, { authService: authMockFail});
         try {
-            await useCase.updateUser(1, user);
+            await useCase.updateUser("1", user);
         } catch (error) {
             expect(error).toBeDefined();
         }
@@ -105,7 +109,7 @@ describe("User use case test", () => {
     it("Should fail get a user successfully", async () => {
         const useCase = new UserUseCase({ userService: mockFail }, { authService: authMockFail});
         try {
-            await useCase.getUser(1);
+            await useCase.getUser("1");
         } catch (error) {
             expect(error).toBeDefined();
         }

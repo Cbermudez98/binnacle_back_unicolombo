@@ -15,7 +15,7 @@ export class App {
 
     private setMiddlewares() {
         this._application.use(morgan("dev"));
-        this._application.use(express.json());
+        this._application.use(express.json({ limit: "50mb" }));
         this._application.set("PORT", ParameterStore.PORT);
     }
 }
