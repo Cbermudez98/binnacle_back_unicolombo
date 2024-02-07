@@ -33,8 +33,10 @@ jobs:
 
       - name: Run database migrations
         run: npm run migration:run
-      
+
       - name: Deploy
-        run: npm run build && railway up --service ${{ secrets.RAILWAY_PROJECT_ID }}
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        uses: bervProject/railway-deploy@main
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          service: ${{ secrets.RAILWAY_PROJECT_ID }}
+          detach: true
