@@ -20,7 +20,7 @@ export class UserRepository implements IUserRepository {
         });
     }
 
-    get(id: number): Promise<IUser | null> {
+    get(id: string): Promise<IUser | null> {
         return new Promise((resolve, reject) => {
             this._userRepository.findOne({ where: { id } })
                 .then((value) => resolve(value))
@@ -28,7 +28,7 @@ export class UserRepository implements IUserRepository {
         });
     }
 
-    update(id: number, user: IUserUpdate): Promise<boolean> {
+    update(id: string, user: IUserUpdate): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this._userRepository.update({ id }, user)
                 .then(({ affected }) => resolve(Boolean(affected)))

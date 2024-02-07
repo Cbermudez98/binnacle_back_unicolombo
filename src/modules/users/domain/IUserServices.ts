@@ -6,4 +6,5 @@ export interface IUserService {
     getUser: (id: IUser['id']) => Promise<IUser>
     updateUser: (id: IUser['id'], user: IUserUpdate) => Promise<boolean>,
     login: (event: IUserLogin) => Promise<{ token: string }>,
+    loginAdmin: (event: IUserLogin) => Promise<{ token: string }>,
 }

@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { IUser } from "../../domain/IUser.interface";
 
-@Entity()
+@Entity({ name: "users" })
 export class User implements IUser {
-    @PrimaryGeneratedColumn({ type: "int" })
-    id: number;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
     @Column({ type: "varchar", length: 10 })
     name: string;

@@ -61,7 +61,7 @@ describe("User repository test", () => {
         const repository = jest.spyOn(userRepository["_userRepository"], "findOne");
         repository.mockResolvedValue({ ...user } as any);
 
-        const createdUser = await userRepository.get(1);
+        const createdUser = await userRepository.get("1");
         expect(createdUser).toBeDefined();
     });
 
@@ -72,7 +72,7 @@ describe("User repository test", () => {
         repository.mockRejectedValue({});
 
         try {
-            await userRepository.get(1);
+            await userRepository.get("1");
         } catch (error) {
             expect(error).toBeDefined();
         }
@@ -89,7 +89,7 @@ describe("User repository test", () => {
         const repository = jest.spyOn(userRepository["_userRepository"], "update");
         repository.mockResolvedValue({ ...user } as any);
 
-        const createdUser = await userRepository.update(1, user);
+        const createdUser = await userRepository.update("1", user);
         expect(createdUser).toBeDefined();
     });
 
@@ -100,7 +100,7 @@ describe("User repository test", () => {
         repository.mockRejectedValue({});
 
         try {
-            await userRepository.update(1, {});
+            await userRepository.update("1", {});
         } catch (error) {
             expect(error).toBeDefined();
         }
