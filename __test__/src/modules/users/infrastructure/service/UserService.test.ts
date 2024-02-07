@@ -6,6 +6,7 @@ import { UserService } from "../../../../../../src/modules/users/infrastructure/
 import { UserRepository } from "../../../../../../src/modules/users/infrastructure/repository/UserRepository";
 import Mailer from "../../../../../../src/utils/Mailer";
 import { Auth } from "../../../../../../src/modules/middleware/auth/Auth.middleware";
+import Encrypt from "../../../../../../src/utils/Encrypt";
 
 describe("User service test", () => {
     let userService: IUserService;
@@ -119,8 +120,10 @@ describe("User service test", () => {
 
     it("Should login an user with success",  async() => {
         const repositoryGet = jest.spyOn(UserRepository.prototype, "getCustomUser");
+        const encryptSpy = jest.spyOn(Encrypt, "compare");
         
-        repositoryGet.mockResolvedValueOnce({ id: "1", auth: true } as IUser);
+        repositoryGet.mockResolvedValueOnce({ id: "1", password: "123" ,auth: true } as IUser);
+        encryptSpy.mockReturnValue(true);
         const response = await userService.login({ email: "c@c.com", password: "123" });
         expect(response).toBeDefined();
     });

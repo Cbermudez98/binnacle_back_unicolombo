@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
     "start:dev": "nodemon dist/index.js",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
     "migration:run": "npm run typeorm migration:run -- -d ./src/config/typeorm.ts",

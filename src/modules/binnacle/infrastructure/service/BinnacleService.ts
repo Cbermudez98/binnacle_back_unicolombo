@@ -5,7 +5,6 @@ import { IBookCreate, IBook, IBookUpdate, IBookFilter } from "../../domain/IBook
 import { IBookViewRepository } from "../../domain/IBookViewRepository";
 import FileUploader from "../../../../utils/FileUploader";
 import { ParameterStore } from "../../../../utils/Constant";
-import Logger from "../../../../utils/Logger";
 
 export class BinnacleService implements IBinnacleService {
     private _repository: IBinnacleRepository;
@@ -24,7 +23,6 @@ export class BinnacleService implements IBinnacleService {
                 folder: ParameterStore.URL_BUCKET_PDF,
                 data: book.book
             });
-            Logger.info(url);
             const newBook = {
                 ...book,
                 url
@@ -45,7 +43,6 @@ export class BinnacleService implements IBinnacleService {
             if(book.book) {
                 const foundBook: IBook = await this._repository.get({ id }) as IBook;
                 const url = await FileUploader.uploadAndGetUrl({ data: book.book, extension: "pdf", folder: ParameterStore.URL_BUCKET_PDF, name: book.title ?? foundBook.title })
-                Logger.silly(url);
                 bookToUpdate.url = url;
             }
             delete bookToUpdate.book;

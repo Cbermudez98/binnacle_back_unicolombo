@@ -10,7 +10,6 @@ import { EmailTemplate } from '../../../../helper/EmailTemplate';
 import { MailBuilder } from '../../../../builder/MailBuilder';
 import { ParameterStore } from '../../../../utils/Constant';
 import Mailer from '../../../../utils/Mailer';
-import Logger from '../../../../utils/Logger';
 import path from 'path';
 import { isCustomError } from '../../../shared/customError/CustomError';
 import { ROLE } from '../../../shared/enums/Enum';
@@ -44,7 +43,6 @@ export class UserService implements IUserService {
             await Mailer.send(builder.build());
             return newUser;
         } catch (error) {
-            Logger.trace(error);
             throw {
                 error: "Error creating user",
                 status: HttpStatusCode.CONFLICT
@@ -72,7 +70,6 @@ export class UserService implements IUserService {
     async updateUser(id: string, user: IUserUpdate): Promise<boolean> {
         try {
             const userFound = await this._userRepository.get(id);
-            Logger.silly(userFound);
             if (!userFound) {
                 throw "User not found";
             }
@@ -88,7 +85,6 @@ export class UserService implements IUserService {
     async login(event: IUserLogin): Promise<{ token: string }> {
         try {
             const user = await this._userRepository.getCustomUser({ email: event.email });
-            Logger.info(user);
             if (!user) {
                 throw "User not found";
             }
