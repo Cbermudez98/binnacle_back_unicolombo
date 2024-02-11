@@ -13,6 +13,7 @@ export class ParameterStore {
     static readonly JWT_KEY = process?.env?.JWT_KEY || "test"
     static readonly URL_FRONT = process?.env?.URL_FRONT || "test";
     static readonly URL_BUCKET_PDF = "pdfs";
+    static readonly URL_BUCKET_IMAGE = "images";
 
     // Email
     static readonly EMAIL_SERVICE = process?.env?.EMAIL_SERVICE || "test";

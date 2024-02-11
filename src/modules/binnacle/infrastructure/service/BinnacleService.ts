@@ -23,9 +23,17 @@ export class BinnacleService implements IBinnacleService {
                 folder: ParameterStore.URL_BUCKET_PDF,
                 data: book.book
             });
+
+            const urlImage = await FileUploader.uploadAndGetUrl({
+                name: book.title,
+                extension: "png",
+                data: book.image,
+                folder: ParameterStore.URL_BUCKET_IMAGE
+            })
             const newBook = {
                 ...book,
-                url
+                url,
+                image: urlImage
             } as any;
             delete newBook.book;
             return await this._repository.create(newBook);
@@ -40,10 +48,27 @@ export class BinnacleService implements IBinnacleService {
     async updateBook(id: string, book: IBookUpdate): Promise<boolean> {
         try {
             const bookToUpdate = { ...book } as any;
+            const foundBook: IBook = await this._repository.get({ id }) as IBook;
             if(book.book) {
-                const foundBook: IBook = await this._repository.get({ id }) as IBook;
-                const url = await FileUploader.uploadAndGetUrl({ data: book.book, extension: "pdf", folder: ParameterStore.URL_BUCKET_PDF, name: book.title ?? foundBook.title })
+                const url = await FileUploader.uploadAndGetUrl(
+                    {
+                        data: book.book,
+                        extension: "pdf",
+                        folder: ParameterStore.URL_BUCKET_PDF,
+                        name: book.title ?? foundBook.title
+                    }
+                );
                 bookToUpdate.url = url;
+            }
+
+            if(book.image) {
+                const url = await FileUploader.uploadAndGetUrl({
+                    name: book.title ?? foundBook.title,
+                    extension: "png",
+                    data: book.image,
+                    folder: ParameterStore.URL_BUCKET_IMAGE
+                });
+                bookToUpdate.image = url;
             }
             delete bookToUpdate.book;
             return await this._repository.update(id, bookToUpdate);

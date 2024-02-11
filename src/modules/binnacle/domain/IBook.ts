@@ -5,6 +5,7 @@ export interface IBook {
     author: string;
     active: true;
     url: string;
+    image: string;
 }
 
 export interface IBookFind extends Partial<IBook> {}

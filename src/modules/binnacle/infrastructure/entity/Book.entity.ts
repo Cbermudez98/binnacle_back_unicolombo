@@ -21,6 +21,9 @@ export class Book implements IBook {
     @Column({ type: "varchar", nullable: false })
     url: string;
 
+    @Column({ type: "varchar", nullable: false })
+    image: string;
+
     @CreateDateColumn()
     created_at: Date;
 
