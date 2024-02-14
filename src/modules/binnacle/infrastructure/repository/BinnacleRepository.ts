@@ -31,7 +31,7 @@ export class BinnacleRepository implements IBinnacleRepository {
         try {
             const whereClause = title ? { title: Like(`%${title}%`) } : {};
             const [data, count] = await this._bookRepository.findAndCount({
-                where: whereClause,
+                where: { ...whereClause, active: true},
                 skip: offset,
                 take: limit,
             });
