@@ -3,10 +3,10 @@ import { IUserLogin, IUserCreate, IUserUpdate } from "../../domain/IUser.interfa
 
 const name = joi.string().min(3);
 const last_name = joi.string().min(3);
-const email = joi.string().email()
-    .regex(new RegExp(/^[a-zA-Z0-9._%+-]+@unicolombo\.edu\.co$/))
-    .message("Invalid email");
-const password = joi.string().min(8).regex(new RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).{8,}$/));
+const email = joi.string().email().message("Invalid email");
+const emailAdmin = email;
+const emailUser = email.regex(new RegExp(/^[a-zA-Z0-9._%+-]+@unicolombo\.edu\.co$/));
+const password = joi.string().min(8);
 const phone_number = joi.string().min(10).max(12);
 const student_id = joi.string().min(10).max(14);
 const document_number = joi.string().min(7).max(12);
@@ -25,13 +25,18 @@ export const userUpdateSchema: joi.ObjectSchema<IUserUpdate> = joi.object({
     name,
     last_name,
     document_number,
-    email,
+    email: emailUser,
     password,
     phone_number,
     student_id
 });
 
 export const userLoginSchema: joi.ObjectSchema<IUserLogin> = joi.object({
-    email: email.required(),
+    email: emailUser.required(),
+    password: password.required()
+});
+
+export const userLoginAdminSchema: joi.ObjectSchema<IUserLogin> = joi.object({
+    email: emailAdmin.required(),
     password: password.required()
 });

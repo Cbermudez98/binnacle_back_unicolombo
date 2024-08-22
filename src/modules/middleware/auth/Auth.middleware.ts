@@ -19,6 +19,7 @@ export class Auth implements IAuth {
                 const valid = this.verifyToken(authorization);
                 if (valid) {
                     req.user = valid.id;
+                    req.role = valid.role;
                     next();
                 } else {
                     throw "Unauthorized";

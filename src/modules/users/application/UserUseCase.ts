@@ -22,7 +22,7 @@ export class UserUseCase implements IUserUseCase {
         }
     }
 
-    async updateUser(id: number, user: IUserUpdate): Promise<boolean> {
+    async updateUser(id: string, user: IUserUpdate): Promise<boolean> {
         try {
             return await this._userService.updateUser(id, user);
         } catch (error) {
@@ -30,7 +30,7 @@ export class UserUseCase implements IUserUseCase {
         }
     }
 
-    async getUser(id: number): Promise<IUser> {
+    async getUser(id: string): Promise<IUser> {
         try {
             return await this._userService.getUser(id);
         } catch (error) {
@@ -38,9 +38,10 @@ export class UserUseCase implements IUserUseCase {
         }
     }
 
-    async login(event: IUserLogin): Promise<{ token: string }> {
+    async login(event: IUserLogin, isAdmin: boolean = false): Promise<{ token: string }> {
         try {
-            return await this._userService.login(event);
+            if(!isAdmin) return await this._userService.login(event);
+            return await this._userService.loginAdmin(event);
         } catch (error) {
             throw error;
         }

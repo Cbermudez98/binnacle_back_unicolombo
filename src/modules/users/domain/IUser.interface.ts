@@ -9,7 +9,7 @@ export interface IUserCreate {
 }
 
 export interface IUser extends IUserCreate {
-    id: number;
+    id: string;
     auth: boolean;
     created_at: Date;
     updated_at: Date | null;

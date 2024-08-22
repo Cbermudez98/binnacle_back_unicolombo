@@ -1,5 +1,6 @@
 import { Request } from "express"
 
 export interface IRequest extends Request {
-    user?: number;
+    user?: string;
+    role?: string;
 }

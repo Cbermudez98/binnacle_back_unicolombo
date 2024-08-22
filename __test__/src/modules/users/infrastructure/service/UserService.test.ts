@@ -5,7 +5,8 @@ import { IUserService } from "../../../../../../src/modules/users/domain/IUserSe
 import { UserService } from "../../../../../../src/modules/users/infrastructure/service/UserService";
 import { UserRepository } from "../../../../../../src/modules/users/infrastructure/repository/UserRepository";
 import Mailer from "../../../../../../src/utils/Mailer";
-import { Auth } from "../../../../../../src/modules/middleware/auth/Auth";
+import { Auth } from "../../../../../../src/modules/middleware/auth/Auth.middleware";
+import Encrypt from "../../../../../../src/utils/Encrypt";
 
 describe("User service test", () => {
     let userService: IUserService;
@@ -33,7 +34,7 @@ describe("User service test", () => {
         const mail = jest.spyOn(Mailer, "send");
         
         mail.mockResolvedValue(true);
-        repository.mockResolvedValueOnce({ id: 1, ...user } as IUser);
+        repository.mockResolvedValueOnce({ id: "1", ...user } as IUser);
         const response = await userService.createUser(user);
         expect(response).toBeDefined();
     });
@@ -74,8 +75,8 @@ describe("User service test", () => {
 
         const repository = jest.spyOn(UserRepository.prototype, "get");
         
-        repository.mockResolvedValueOnce({ id: 1, ...user } as IUser);
-        const response = await userService.getUser(1);
+        repository.mockResolvedValueOnce({ id: "1", ...user } as IUser);
+        const response = await userService.getUser("1");
         expect(response).toBeDefined();
     });
     it("Should throw an error getting a user",  async() => {
@@ -83,7 +84,7 @@ describe("User service test", () => {
         
         repository.mockResolvedValue(null);
         try {
-            await userService.getUser(1);
+            await userService.getUser("1");
         } catch (error) {
             expect(error).toBeDefined();
         }
@@ -97,9 +98,9 @@ describe("User service test", () => {
         const repositoryGet = jest.spyOn(UserRepository.prototype, "get");
         const repositoryUpdate = jest.spyOn(UserRepository.prototype, "update");
         
-        repositoryGet.mockResolvedValueOnce({ id: 1, ...user } as IUser);
+        repositoryGet.mockResolvedValueOnce({ id: "1", ...user } as IUser);
         repositoryUpdate.mockResolvedValueOnce(true);
-        const response = await userService.updateUser(1, user);
+        const response = await userService.updateUser("1", user);
         expect(response).toBeDefined();
     });
 
@@ -111,7 +112,7 @@ describe("User service test", () => {
         const repositoryGet = jest.spyOn(UserRepository.prototype, "get");
         repositoryGet.mockResolvedValue(null);
         try {
-            await userService.updateUser(1, user);
+            await userService.updateUser("1", user);
         } catch (error) {
             expect(error).toBeDefined();
         }
@@ -119,8 +120,10 @@ describe("User service test", () => {
 
     it("Should login an user with success",  async() => {
         const repositoryGet = jest.spyOn(UserRepository.prototype, "getCustomUser");
+        const encryptSpy = jest.spyOn(Encrypt, "compare");
         
-        repositoryGet.mockResolvedValueOnce({ id: 1, auth: true } as IUser);
+        repositoryGet.mockResolvedValueOnce({ id: "1", password: "123" ,auth: true } as IUser);
+        encryptSpy.mockReturnValue(true);
         const response = await userService.login({ email: "c@c.com", password: "123" });
         expect(response).toBeDefined();
     });
@@ -139,7 +142,7 @@ describe("User service test", () => {
     it("Should throw an error login an user auth",  async() => {
         const repositoryGet = jest.spyOn(UserRepository.prototype, "getCustomUser");
         
-        repositoryGet.mockResolvedValue({ id: 1, auth: false } as IUser);
+        repositoryGet.mockResolvedValue({ id: "1", auth: false } as IUser);
         try {
             await userService.login({ email: "c@c.com", password: "123" });
         } catch (error) {
@@ -153,7 +156,7 @@ describe("User service test", () => {
         authSpy.mockImplementation(() => {
             throw new Error();
         });
-        repositoryGet.mockResolvedValueOnce({ id: 1, auth: true } as IUser);
+        repositoryGet.mockResolvedValueOnce({ id: "1", auth: true } as IUser);
         try {
             await userService.login({ email: "c@c.com", password: "123" });
         } catch (error) {
